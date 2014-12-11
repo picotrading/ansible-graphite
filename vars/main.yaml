@@ -1,0 +1,9 @@
+---
+
+# Directory variables
+graphite_config_dir: /etc/graphite-web
+graphite_django_dir: /usr/lib/python2.6/site-packages/django
+graphite_log_dir: /var/log/graphite-web
+graphite_python_dir: /usr/lib/python2.6/site-packages/graphite
+graphite_root_dir: /usr/share/graphite
+graphite_storage_dir: /var/lib/graphite-web

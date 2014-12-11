@@ -1,0 +1,64 @@
+---
+
+- name: Test distribution
+  assert:
+    that: ansible_os_family == "RedHat"
+
+# Use check-dependencies.py from Graphite on Github
+- name: Install packages
+  yum:
+    pkg: "{{ item }}"
+    state: present
+  with_items:
+    - graphite-web
+    - python-carbon
+    - httpd
+
+- name: Graphite Web config
+  template:
+    src: local_settings.py.j2
+    dest: "{{ graphite_config_dir }}/local_settings.py"
+  notify:
+    - Restart Apache
+
+- name: Fix some error messages in Django
+  copy:
+    src: app_settings.py
+    dest: "{{ graphite_python_dir }}/app_settings.py"
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Restart Apache
+
+- name: Apache vhost config
+  template:
+    src: graphite-web.conf.j2
+    dest: "/etc/httpd/conf.d/graphite-web.conf"
+  notify:
+    - Restart Apache
+
+- name: Check status of the Graphite DB
+  command: python {{ graphite_python_dir }}/manage.py inspectdb
+  register: result
+  changed_when: False
+
+- name: Sync Graphite DB
+  command: python {{ graphite_python_dir }}/manage.py syncdb --noinput
+  when: result.stdout.find('account_mygraph') == -1
+
+- name: Make sure the Graphite DB is owned by Apache
+  file:
+    path: "{{ graphite_storage_dir }}/graphite.db"
+    owner: apache
+    group: apache
+    mode: 0644
+
+- name: Start services
+  service:
+    name: "{{ item }}"
+    enabled: yes
+    state: started
+  with_items:
+    - httpd
+    - carbon-cache

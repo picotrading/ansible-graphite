@@ -1,0 +1,12 @@
+---
+
+galaxy_info:
+  author: Jiri Tyr
+  description: Graphite installed from RPMs and using Apache proxy and SQLite DB
+  license: MIT
+  min_ansible_version: 1.7
+  platforms:
+    - name: Redhat
+  categories:
+    - system
+dependencies: []
