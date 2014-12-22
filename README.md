@@ -11,9 +11,16 @@ Example
 ---
 
 # Example of how to use the role
-- hosts: myhost
+- hosts: myhost1
   roles:
     - graphite
+
+# Example of how to set additional params
+- hosts: myhost2
+  roles:
+    - role: graphite
+      graphite_timezone: US/Central
+      graphite_apache_cors: yes
 ```
 
 
