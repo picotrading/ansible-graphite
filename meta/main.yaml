@@ -9,4 +9,5 @@ galaxy_info:
     - name: Redhat
   categories:
     - system
-dependencies: []
+dependencies:
+  - carbon
