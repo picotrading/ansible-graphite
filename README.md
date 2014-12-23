@@ -47,6 +47,11 @@ graphite_apache_cors: false
 graphite_apache_cors_origin: '*'
 ```
 
+Dependencies
+------------
+
+* [`carbon`](https://github.com/picotrading/ansible-carbon) role
+
 
 License
 -------
